@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Testing</title>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.js"></script>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript" >
+		var dim = 34;
+		var shipY = 0;
+		var world;
+		var interval = 500;
+		var upperLim = 6;
+		var lowerLim = 0;
+		$(document).ready(function(){
+			// alert('Starting initialization');
+			world=[
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+			[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]];
+			createShip();
+			render();	
+		});
+
+		var render = function(){
+			if(checkCollision()){
+				alert("You have collided");
+				clearInterval(interval);
+			}
+			var worldHtml = "";
+			console.log("Creating world");
+			for(var i = 0 ; i < world.length; i++){
+				worldHtml+='<div id="row'+i+'" class="row">';
+				for(var k = 0; k < world[i].length; k++){
+					if(world[i][k]==0){
+						worldHtml+="<div class='cell hole'></div>";
+					}else{
+						worldHtml+="<div class='cell wall'></div>";
+					}
+				}
+				worldHtml+='</div>';
+			}
+			$('#world .cell').remove();
+			$('#world').html($('#world').html()+worldHtml);
+			console.log('Finished Creation');
+		}
+
+		var getCell = function(){
+			var val = Math.floor(Math.random()*7);
+			return val;
+		}
+
+		// Set the timer so that on each second we add one row
+		var interval = setInterval(function(){
+			//Remove the first col
+			for(var i = 0; i < world.length; i++){
+				world[i].shift();
+			}
+
+			//Add the new column
+			for(var i = 0; i < world.length; i++){
+				//1 is wall, 0 is hole
+				if(i==wall){
+					world[i].push(1);
+				}else{
+					world[i].push(0);
+				}
+			}
+			if(interval >10){
+				interval--;
+			}
+			render();
+		}, interval);
+
+		var progressWorld = function(){
+			
+		}
+
+		var createShip = function(){
+			console.log('Ship');
+			$('#world').append('<div id="ship"></div>');
+		}
+
+		var checkCollision = function(){
+			var ind = -1;
+			for(var i = 0; i < world.length; i++){
+				if(world[i][0] == 1){
+					ind = i;
+					break;
+				}
+			}
+			if(shipY == ind){
+				return true;
+			}
+			return false;
+		}
+		
+
+		$(document).keydown(function(e){
+			console.log(e.which);
+			
+			if(e.which == '38'){	//Up
+				if(shipY > 0){
+					shipY--;
+					$('#ship').css('top',dim*shipY);
+				}
+			}else if(e.which == '40'){	//Down
+				if(shipY < upperLim){
+					shipY++;
+					$('#ship').css('top',dim*shipY);
+				}
+			}else if(e.which == '39'){	//Down
+				interval--;
+			}
+			if(checkCollision()){
+				alert("You have collided");
+				clearInterval(interval);
+			}
+		});
+	</script>
+</head>
+<body>
+	<div id="world"></div>
+</body>
+</html>

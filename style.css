@@ -1,0 +1,45 @@
+:root {
+	--cell-size: 20px;
+	--ship-size: 30px;
+}
+.hole {
+	/*background-color: black;*/
+	border-width:5px;
+	border-style:solid;
+	border-color:white;
+	display:inline-block;
+}
+
+.cell {
+	width: var(--cell-size);
+	height: var(--cell-size);
+	display:inline-block;
+	margin:0px;
+}
+.wall {
+	background-color: white;
+	border-width:5px;
+	border-style:solid;
+	border-color:black;
+	display:inline-block;
+}
+#ship{
+	background-image: url('car.png');
+	background-position:  center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	width: var(--ship-size);
+	height: var(--ship-size);
+	position: absolute;
+	border-style:none;
+	top:0px;
+}
+#world{
+	position: relative;
+	overflow:hidden;
+
+}
+.row{
+	margin:0px;
+	padding:0px;
+}
